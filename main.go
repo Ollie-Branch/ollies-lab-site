@@ -51,12 +51,19 @@ func ReturnPartial(c *gin.Context, partial_path string) {
 func main() {
     // Create a default gin router
     router := gin.Default()
+	// I don't even know what this controls, but if it is what allows the
+	// server to be reverse proxied I set it to localhost and the server's ip
+	router.SetTrustedProxies([]string{"127.0.0.1", "93.188.161.205"})
 
 	router.Static("/assets", "./assets")
 	router.Static("/styles", "./styles")
 	// I only do this in case I need to load extra content within a page at this
 	// subdirectory. Hope this doesn't break anything tho.
 	router.Static("/hypertext", "./hypertext")
+
+	router.GET("/favicon.ico", func(c *gin.Context) {
+		c.File("./assets/favicon.ico")
+	})
 
 	router.GET("/", func(c *gin.Context) {
 		hx_header := c.Request.Header.Get("Hx-Request")
