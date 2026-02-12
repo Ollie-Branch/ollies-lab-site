@@ -1,0 +1,12 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: "ollies-lab"
+    ports:
+      - "6767:6767"
+    network_mode: "host"
+    environment:
+      - GIN_MODE=release
