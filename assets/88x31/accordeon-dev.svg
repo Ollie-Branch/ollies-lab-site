@@ -1,0 +1,60 @@
+<svg width="86" height="31" viewBox="0 0 22.754 8.202" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="prefix__b" gradientUnits="userSpaceOnUse" x1="4" y1="7" x2="4" y2="11.5"
+      gradientTransform="translate(6 .25)">
+      <stop offset="0" stop-color="#4a4a4a" />
+      <stop offset=".382" stop-color="#4a4a4a" stop-opacity="0" />
+    </linearGradient>
+    <linearGradient id="prefix__a" x1="5.517" y1="-5.651" x2="17.237" y2="13.853" gradientUnits="userSpaceOnUse">
+      <stop offset=".587" stop-color="#fff" />
+      <stop offset=".632" stop-color="#707070" />
+      <stop offset=".638" />
+    </linearGradient>
+    <linearGradient id="prefix__h" x1="30.445" y1="-10.411" x2="63.662" y2="44.872" gradientUnits="userSpaceOnUse">
+      <stop offset=".587" />
+      <stop offset=".632" stop-color="#707070" />
+      <stop offset=".638" stop-color="#fff" />
+    </linearGradient>
+    <linearGradient id="prefix__f" x1="4" y1="7" x2="4" y2="11.5" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4a4a4a" />
+      <stop offset="1" stop-color="#4a4a4a" stop-opacity="0" />
+    </linearGradient>
+    <linearGradient id="prefix__g" x1="-2" y1="4" x2="-2" y2="8.5" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4a4a4a" />
+      <stop offset="1" stop-color="#4a4a4a" stop-opacity="0" />
+    </linearGradient>
+    <linearGradient id="prefix__c" gradientUnits="userSpaceOnUse" x1="-2" y1="4" x2="-2" y2="8.5"
+      gradientTransform="translate(-6 -5.75)">
+      <stop offset="0" stop-color="#4a4a4a" />
+      <stop offset=".376" stop-color="#4a4a4a" stop-opacity="0" />
+    </linearGradient>
+    <linearGradient id="prefix__d" gradientUnits="userSpaceOnUse" gradientTransform="translate(6 .25)" x1="4" y1="7"
+      x2="4" y2="11.5">
+      <stop offset="0" stop-color="#4a4a4a" />
+      <stop offset=".171" stop-color="#4a4a4a" stop-opacity="0" />
+    </linearGradient>
+    <linearGradient id="prefix__e" gradientUnits="userSpaceOnUse" gradientTransform="translate(-6 -5.75)" x1="-2" y1="4"
+      x2="-2" y2="8.5">
+      <stop offset="0" stop-color="#4a4a4a" />
+      <stop offset=".177" stop-color="#4a4a4a" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+  <path fill="url(#prefix__a)" d="M0 0h22.754v8.202H0z" />
+  <path transform="matrix(.86603 -.5 0 1 .866 1.5)" fill="url(#prefix__b)" d="M9 7.25h2v3.5H9z" />
+  <path fill="#d1d1d1" d="M8.66 4.25l-1.732-1 1.732-1 1.732 1z" />
+  <path transform="matrix(-.86603 -.5 0 1 .866 1.5)" fill="url(#prefix__c)" d="M-9-1.75h2v3.5h-2z" />
+  <path transform="matrix(.86603 -.5 0 1 -1.732 5)" fill="url(#prefix__d)" d="M9 7.25h2v3.5H9z" />
+  <path fill="#d1d1d1" d="M6.062 7.75l-1.732-1 1.732-1 1.732 1z" />
+  <path transform="matrix(-.86603 -.5 0 1 -1.732 5)" fill="url(#prefix__e)" d="M-9-1.75h2v3.5h-2z" />
+  <g>
+    <path transform="matrix(.86603 -.5 0 1 -.374 -3.25)" fill="url(#prefix__f)" d="M3 7h2v7H3z" />
+    <path fill="#d1d1d1" d="M2.224 2.25l-1.732-1 1.732-1 1.732 1z" />
+    <path transform="matrix(-.86603 -.5 0 1 -.374 -3.25)" fill="url(#prefix__g)" d="M-3 4h2v7h-2z" />
+  </g>
+  <g style="-inkscape-font-specification:'Hack Bold';white-space:pre" transform="matrix(.26458 0 0 .26458 .915 -.754)"
+    aria-label="ACCORDEON DEV" font-weight="700" font-size="12" font-family="Hack" fill="url(#prefix__h)"
+    stroke="#8a8a8a" stroke-width="1.002" stroke-linejoin="bevel" paint-order="stroke fill markers" text-anchor="end">
+    <path style="text-align:end"
+      d="M17.168 5.436h2.115l2.362 8.748h-1.729l-.539-2.163h-2.314l-.528 2.163h-1.728zm1.875 5.162l-.82-3.58-.815 3.58zm7.242 3.756q-1.752 0-2.69-1.166-.93-1.172-.93-3.37 0-2.209.93-3.375.938-1.166 2.69-1.166.51 0 .967.106.457.105.855.316v1.922q-.263-.246-.474-.38-.205-.141-.393-.223-.222-.1-.44-.141-.21-.047-.427-.047-.937 0-1.424.75-.486.768-.486 2.238 0 1.477.486 2.227.487.756 1.424.756.451 0 .873-.194.205-.093.404-.228.205-.14.457-.37v1.923q-.41.21-.86.316-.446.106-.962.106zm7.225 0q-1.752 0-2.69-1.166-.931-1.172-.931-3.37 0-2.209.931-3.375.938-1.166 2.69-1.166.51 0 .967.106.457.105.855.316v1.922q-.264-.246-.475-.38-.205-.141-.392-.223-.223-.1-.44-.141-.21-.047-.427-.047-.938 0-1.424.75-.486.768-.486 2.238 0 1.477.486 2.227.486.756 1.424.756.45 0 .873-.194.205-.093.404-.228.205-.14.457-.37v1.923q-.41.21-.861.316-.446.106-.961.106zm6.386 0q-.79 0-1.359-.293-.562-.3-.932-.85-.779-1.148-.779-3.393 0-2.232.78-3.398.404-.598.99-.867.586-.276 1.3-.276 1.518 0 2.303 1.149.774 1.148.774 3.392 0 2.233-.774 3.387-.375.557-.949.856-.568.293-1.354.293zm0-1.553q.668 0 .973-.71.305-.685.305-2.278 0-1.588-.305-2.274-.305-.709-.973-.709-.656 0-.966.71-.305.685-.305 2.272 0 1.594.305 2.28.304.709.966.709zm4.395-7.365h2.496q1.688 0 2.426.597.369.299.55.791.182.487.182 1.125 0 .492-.111.844-.105.352-.328.621-.211.258-.522.422-.304.158-.744.217.276.058.451.24.088.088.2.27.117.181.263.474l1.582 3.147h-1.898l-1.055-2.21-.123-.257q-.246-.504-.504-.744-.258-.246-.586-.246h-.55v3.457H44.29zm2.543 3.837q.715 0 1.02-.28.14-.13.222-.347.082-.216.082-.568 0-.644-.304-.914-.311-.275-1.02-.275h-.814v2.384zm4.705-3.837h1.852q2.15 0 3.088 1.02.462.503.703 1.335.24.826.24 2.016 0 2.314-.943 3.345-.944 1.032-3.088 1.032h-1.852zm2.197 7.189q1.02 0 1.453-.645.434-.644.434-2.18 0-1.523-.434-2.167-.427-.639-1.453-.639h-.468v5.631zm5.21-7.19h5.449V6.96h-3.721v1.887h3.369v1.523h-3.37v2.291h3.722v1.524h-5.45zm9.849 8.919q-.791 0-1.36-.293-.562-.3-.931-.85-.78-1.148-.78-3.393 0-2.232.78-3.398.404-.598.99-.867.586-.276 1.3-.276 1.519 0 2.304 1.149.773 1.148.773 3.392 0 2.233-.773 3.387-.375.557-.95.856-.568.293-1.353.293zm0-1.553q.668 0 .973-.71.304-.685.304-2.278 0-1.588-.304-2.274-.305-.709-.973-.709-.656 0-.967.71-.305.685-.305 2.272 0 1.594.305 2.28.305.709.967.709zm4.312-7.365h1.858l2.437 6.357V5.436h1.524v8.748H77.08l-2.45-6.358v6.358h-1.523zM58.764 20.436h1.851q2.15 0 3.088 1.02.463.503.703 1.335.24.826.24 2.016 0 2.314-.943 3.345-.943 1.032-3.088 1.032h-1.851zm2.197 7.189q1.02 0 1.453-.645.434-.644.434-2.18 0-1.523-.434-2.167-.428-.639-1.453-.639h-.469v5.631zm5.209-7.19h5.45v1.524h-3.722v1.887h3.37v1.523h-3.37v2.291h3.721v1.524h-5.45zm6.574 0h1.74l1.536 7.307 1.54-7.306h1.74l-2.08 8.748h-2.396z" />
+  </g>
+</svg>
