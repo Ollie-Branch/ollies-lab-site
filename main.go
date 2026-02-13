@@ -6,17 +6,17 @@ import (
 	"text/template"
 	"net/http"
 	"fmt"
-	// "io"
 	"bytes"
     "github.com/gin-gonic/gin"
 )
 
 // The template that does raw response when not being requested by HTMX
-type RawResponse struct {
+type ContentfulResponse struct {
+	Title string
 	Content string
 }
 
-func ReturnContentfulPage(c *gin.Context, skeleton_path string, partial_path string) {
+func ReturnContentfulPage(c *gin.Context, skeleton_path string, partial_path string, doc_title string) {
 	buf := new(bytes.Buffer)
 	skel_html, err := os.ReadFile(skeleton_path)
 	if err != nil {
@@ -31,7 +31,7 @@ func ReturnContentfulPage(c *gin.Context, skeleton_path string, partial_path str
 		panic(err)
 	}
 
-	resp := RawResponse{string(partial_html)}
+	resp := ContentfulResponse{doc_title, string(partial_html)}
 	err = tmpl.Execute(buf, resp)
 	if err != nil {
 		panic(err)
@@ -105,7 +105,7 @@ func main() {
 		if(hx_header == "true") {
 			ReturnPartial(c, "./hypertext/index.html")
 		} else {
-			ReturnContentfulPage(c, "./hypertext/base.html", "./hypertext/index.html")
+			ReturnContentfulPage(c, "./hypertext/base.html", "./hypertext/index.html", "Ollie's Lab")
 		}
 	})
 	router.GET("/lab-reports", func(c *gin.Context) {
@@ -116,7 +116,18 @@ func main() {
 		if(hx_header == "true") {
 			ReturnPartial(c, "./hypertext/lab-reports/reports-index.html")
 		} else {
-			ReturnContentfulPage(c, "./hypertext/base.html", "./hypertext/lab-reports/reports-index.html")
+			ReturnContentfulPage(c, "./hypertext/base.html", "./hypertext/lab-reports/reports-index.html", "\"Lab Reports\"")
+		}
+	})
+	router.GET("/lab-reports/simple-site-htmx-go", func (c *gin.Context) {
+		// fix for HTMX cache issues
+		// https://htmx.org/docs/#caching
+		c.Header("Vary", "HX-Request")
+		hx_header := c.Request.Header.Get("HX-Request")
+		if(hx_header == "true") {
+			ReturnPartial(c, "./hypertext/lab-reports/simple-site-htmx-go.html")
+		} else {
+			ReturnContentfulPage(c, "./hypertext/base.html", "./hypertext/lab-reports/simple-site-htmx-go.html", "Quick and Diry HTMX+Go")
 		}
 	})
 	router.GET("/projects", func(c *gin.Context) {
@@ -127,7 +138,7 @@ func main() {
 		if(hx_header == "true") {
 			ReturnPartial(c, "./hypertext/projects/projects-index.html")
 		} else {
-			ReturnContentfulPage(c, "./hypertext/base.html", "./hypertext/projects/projects-index.html")
+			ReturnContentfulPage(c, "./hypertext/base.html", "./hypertext/projects/projects-index.html", "Projects")
 		}
 	})
 	router.GET("/tunes-town", func(c *gin.Context) {
@@ -138,7 +149,7 @@ func main() {
 		if(hx_header == "true") {
 			ReturnPartial(c, "./hypertext/tunes-town.html")
 		} else {
-			ReturnContentfulPage(c, "./hypertext/base.html", "./hypertext/tunes-town.html")
+			ReturnContentfulPage(c, "./hypertext/base.html", "./hypertext/tunes-town.html", "Tunes Town")
 		}
 	})
 	router.GET("/gallery", func(c *gin.Context) {
@@ -149,7 +160,7 @@ func main() {
 		if(hx_header == "true") {
 			ReturnPartial(c, "./hypertext/gallery.html")
 		} else {
-			ReturnContentfulPage(c, "./hypertext/base.html", "./hypertext/tunes-town.html")
+			ReturnContentfulPage(c, "./hypertext/base.html", "./hypertext/gallery.html", "Gallery")
 		}
 	})
 	router.GET("/museum", func(c *gin.Context) {
@@ -160,7 +171,7 @@ func main() {
 		if(hx_header == "true") {
 			ReturnPartial(c, "./hypertext/museum.html")
 		} else {
-			ReturnContentfulPage(c, "./hypertext/base.html", "./hypertext/museum.html")
+			ReturnContentfulPage(c, "./hypertext/base.html", "./hypertext/museum.html", "Museum")
 		}
 	})
 	router.GET("/adventure-map", func(c *gin.Context) {
@@ -171,7 +182,7 @@ func main() {
 		if(hx_header == "true") {
 			ReturnPartial(c, "./hypertext/adventure-map.html")
 		} else {
-			ReturnContentfulPage(c, "./hypertext/base.html", "./hypertext/adventure-map.html")
+			ReturnContentfulPage(c, "./hypertext/base.html", "./hypertext/adventure-map.html", "Adventure Map")
 		}
 	})
 

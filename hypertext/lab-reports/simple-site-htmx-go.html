@@ -1,0 +1,926 @@
+<div id="index-template" class="grid grid-even-rows">
+    <!-- I want to add a way to grab these from the HTML and use that in the
+    loop to populate the static title of the content server-side for SSR, or
+    maybe I'll make a config file that populates this and the SSR data structure
+    idk. -->
+    <script id="document-title">
+     document.title = "Quick and Dirty HTMX+Go"
+    </script>
+    <div data-cols="1 2">
+    <article class="box" data-cols="3 5">
+        <h1 id="visible-article-title">
+            Quick and Dirty HTMX+Go
+        </h1>
+        <h2 id="intro">
+            Hello From HTMX and GO!!!
+        </h2>
+        <p>
+            If you're wondering how I got here, I had a technical blog
+            originally made in hugo. The problem (for me anyway) was that I
+            found the learning curve for making modifications to a hugo site
+            slightly too daunting for what I wanted to do (given my impatience
+            in learning new things). For example, I wanted to add an 88x31
+            button section to my site, but modifying or extending an existing
+            theme to support this seemed like a task too daunting for someone
+            that doesn't know hugo to any large extent at all
+            <a href="https://github.com/Ollie-Branch/hugo-PaperMod"
+                target="_blank">
+            (link to my edit of the papermod theme if you're interested).
+            </a>
+            Also, I've wanted to have more control over my stack for a long
+            time, to the extent that I can preserve my sanity at least. I'm not
+            the kind of mad scientist that would want to maintain a backend
+            in something like raw assembly if you know what I mean.
+        </p>
+        <p>
+            If you want to see the finished code while following the tutorial,
+            or just want to see the code and try to figure it out yourself,
+            you can do so
+            <a href="https://github.com/Ollie-Branch/tutorial-htmx-go"
+               target="_blank">here.</a>
+        </p>
+        <h2 id="get-to-the-point">
+            Where are you going with this?
+        </h2>
+        <p>
+            Well, perhaps it is a skill issue on my part, but I wasn't able to
+            find a short and concise tutorial for getting a simple Go+HTMX site
+            running with the ability to replace sections using HTMX'
+            <code>
+                hx-get
+            </code>
+            tags, while also supporting server-side rendering. Of course, maybe
+            it is really just that obvious that most wouldn't need a quick
+            "getting started" guide. Regardless of that, though, I've decided to
+            be the change I want to see in the world, and create a (hopefully)
+            super quick tutorial on how to get started with HTMX+Go.
+        </p>
+        <h2 id="outline">
+            What does this tutorial consist of?
+        </h2>
+        <p>
+            By the end of this tutorial you should be able to: <br>
+            <ul>
+                <li>
+                    Create a mostly-static page with HTMX methods to populate
+                    certain sections of content based on user input.
+                </li>
+                <li>
+                    Create a backend that can give HTMX the fragments it
+                    expects.
+                </li>
+                <li>
+                    Have this backend also serve the entire page if it wasn't
+                    called from HTMX. For instance, when a user visits a
+                    specific URL that's an endpoint for our HTMX code, or a
+                    search engine crawler indexes your site.
+                </li>
+            </ul>
+            <br>
+            You will also probably need these things to build the test site:
+            <ul>
+                <li>
+                    A working go installation (since I'm on an immutable distro
+                    I use an arch distrobox with all my dev tools on it exported
+                    to the host but your package manager should have it
+                    available, or if you're on windows you can install it from
+                    their website).
+                </li>
+                <li>
+                    A working installation of python isn't necessary to build
+                    the site in total, but we will be using it to launch a
+                    barebones http server while we are still working on the
+                    minimal frontend code.
+                </li>
+                <li>
+                    Some fundamental knowledge of HTML and Go is probably not
+                    necessary but if you have a hard time following the tutorial
+                    and <em>don't</em> have these skills then... well I warned
+                    you.
+                </li>
+            </ul>
+            <br>
+            Optionally, we will also be using docker in the end step just to
+            make an easily deployable version of the site, but if you don't care
+            to do that then it is by no means necessary to do so.
+            <br>
+            Most of the code in this tutorial is based on a stripped down
+            version of this website.
+            You can find the specific commit that this tutorial is based on
+            <a href="https://github.com/Ollie-Branch/ollies-lab-site/tree/24c9c2458e25e07dadce6f4ef622a3b79d0269b3"
+                target="blank">
+                here</a>,
+            since the previous statement will only get more out of
+            date as time goes on.
+
+            <h2 id="frontend-step">
+                Getting Started: Initiating HTMX
+            </h2>
+            <p>
+                To start, we are going to create files called
+                <code>index.html</code>,
+                <code>content-1.html</code>,
+                <code>content-2.html</code>, and
+                <code>content-3.html</code>
+                in the folder you want to store your project in (which can be
+                any folder on your system). These will be the files you put your
+                markup in and where we'll call HTMX function in our code which
+                our backend will interpret.
+            </p>
+            <h3 id="frontend-step-index-html">
+                index.html, The Skeleton of Our Content
+            </h3>
+            <p>
+                When creating a simple site using HTMX (like we're doing here
+                today), we'll start by making a simple "skeleton" of our page
+                that we'll then use HTMX to insert content into. This insertion
+                of content is done by pulling other HTML files from the backend
+                and inserting them verbatim into the document where we choose.
+                This is the crux of how HTMX works and once you understand this,
+                development of your simple dynamic page becomes much simpler.
+            </p>
+            <p>
+               To start, I'm going to put the entire index.html here, then I'll
+                explain the parts that are unique to HTMX (and the stylesheets
+                we use).
+            </p>
+            <p>
+                <pre>
+                    <code>
+&lt;!-- index.html --&gt;
+&lt;!doctype html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;utf-8&quot;&gt;
+        &lt;script src=&quot;https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js&quot; integrity=&quot;sha384-/TgkGk7p307TH7EXJDuUlgG3Ce1UVolAOFopFekQkkXihi5u/6OCvVKyz1W+idaz&quot; crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;
+        &lt;link rel=stylesheet href=https://unpkg.com/missing.css@1.2.0&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;header class=&quot;navbar width:100%&quot;&gt;
+            &lt;nav aria-label=&quot;site-sections&quot;&gt;
+                &lt;ul role=&quot;list&quot; class=&quot;flex-row flex-wrap:wrap&quot;&gt;
+                    &lt;li&gt;
+                        &lt;strong&gt;
+                            &lt;button
+                                hx-get=&quot;/content-1.html&quot;
+                                hx-target=&quot;#content&quot;
+                                hx-swap=&quot;innerHTML&quot;
+                                hx-trigger=&quot;click&quot;
+                                hx-push-url=&quot;true&quot;&gt;
+                                content-1
+                            &lt;/button&gt;
+                        &lt;/strong&gt;
+                    &lt;/li&gt;
+                    &lt;li&gt;
+                        &lt;strong&gt;
+                            &lt;button
+                                hx-get=&quot;/content-2.html&quot;
+                                hx-target=&quot;#content&quot;
+                                hx-swap=&quot;innerHTML&quot;
+                                hx-trigger=&quot;click&quot;
+                                hx-push-url=&quot;true&quot;&gt;
+                                content-2
+                            &lt;/button&gt;
+                        &lt;/strong&gt;
+                    &lt;/li&gt;
+                    &lt;li&gt;
+                        &lt;strong&gt;
+                            &lt;button
+                                hx-get=&quot;/content-3.html&quot;
+                                hx-target=&quot;#content&quot;
+                                hx-swap=&quot;innerHTML&quot;
+                                hx-trigger=&quot;click&quot;
+                                hx-push-url=&quot;true&quot;&gt;
+                                content-3
+                            &lt;/button&gt;
+                        &lt;/strong&gt;
+                    &lt;/li&gt;
+                &lt;/ul&gt;
+            &lt;/nav&gt;
+        &lt;/header&gt;
+        &lt;main id=&quot;content&quot; class=&quot;width:100%&quot;&gt;
+        &lt;/main&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+                    </code>
+                </pre>
+            </p>
+            <p>
+                Phew, that's quite a bit of code isn't it? If you want to (and
+                have python installed), you can go ahead and check this code out
+                by running <code>python3 -m http.server</code> in the terminal
+                and then visit your site on
+                <code>localhost:8000/index.html</code> to see what it looks
+                like. 
+                <br>
+                If you did everything correctly, your result should look like
+                this (if your system defaults to light theme the page will be
+                a light color):
+                <br>
+                <img
+                    src="/assets/lab-reports/simple-site-htmx-go/htmx-skeleton.png"
+                    alt="A site with a navbar displaying &quot;content-1&quot;,
+                         &quot;content-2&quot;, and &quot;content-3&quot;.">
+            </p>
+            <p>
+                In the head of the document, there are two important lines that
+                we use to include both htmx and the stylesheets we use (from
+                missing.css). These lines are:
+                <pre>
+                    <code>
+&lt;script src=&quot;https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js&quot; integrity=&quot;sha384-/TgkGk7p307TH7EXJDuUlgG3Ce1UVolAOFopFekQkkXihi5u/6OCvVKyz1W+idaz&quot; crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;
+&lt;link rel=stylesheet href=https://unpkg.com/missing.css@1.2.0&gt;
+                    </code>
+                </pre>
+                <br>
+                These lines simply bring in the necessary dependencies for both
+                HTMX and the stylesheets we use (to get dark mode and rudimetary
+                styling to make it more pleasant to view).
+            </p>
+            <p>
+                To use HTMX, we declare the <code>hx-*</code> methods we wish to
+                use in elements that we want to add interactivity to. In the
+                <code>index.html</code> file we wrote above, we define several
+                methods in each button to call HTMX. These methods are:
+                <ul>
+                    <li>
+                        hx-get: issues a get request to the server at the path
+                        we specify, in the case of first button, we issue a get
+                        request to the path "/content-1.html"
+                    </li>
+                    <li>
+                        hx-target: the target of the element we want to swap
+                        with the incoming HTML, in this case we use the CSS
+                        selector #content to swap the area with the id of
+                        "content"
+                    </li>
+                    <li>
+                        hx-swap: where in the target we perform the swap, in
+                        this case, we define "innerHTML" to tell HTMX we only
+                        want to swap whats inside the tag with the id of
+                        "content"
+                    </li>
+                    <li>
+                        hx-trigger: What action triggers this element to perform
+                        its action. In this case, we set it to click. So that
+                        when the user clicks the button, it swaps the body of
+                        the HTML with the response of <code>hx-get</code>
+                    </li>
+                    <li>
+                        hx-push-url: This tells HTMX to push the url of the
+                        <code>hx-get</code> method to the browser's URL. This
+                        isn't useful now but will be for both being able to
+                        refresh the page with the current state, being able
+                        to go backwards and forwards, and also being able to
+                        visit this from scratch later (without having to
+                        navigate to the base URL first).
+                    </li>
+                </ul>
+            </p>
+            <h3 id="frontend-step-content">
+                Populating The Content Files to Test HTMX
+            </h3>
+            <p>
+                Now that we have buttons that issue get requests to the content
+                files, and have the mechanism in place to replace parts of the
+                document with the server's response, let's add some rudimentary
+                content to these files to test it out. I will be using some
+                basic lorem ipsum text with a heading displaying the content-#
+                that was retrieved from the server.
+                <br>
+                Here's what that looks like:
+                <br>
+                <pre>
+                    <code>
+&lt;h1&gt;
+    CONTENT 1
+&lt;/h1&gt;
+&lt;p&gt;
+    Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex
+    sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis
+    convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus
+    fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada
+    lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti
+    sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+&lt;/p&gt;
+
+                    </code>
+                </pre>
+                To prevent being too verbose, I won't include the text of the
+                <code>content-2.html</code> and <code>content-3.html</code>
+                files. They will be the same except for the heading, which will
+                be called "CONTENT #" with the number representing the number in
+                the filename. The number in the heading is how we will
+                distinguish that the buttons work in our code, by seeing the
+                number change in correspondence with the button we click.
+            </p>
+            <p>
+                Now that we have the content files populated, you can go ahead
+                and run that server again and see the changes you've made.
+                Click the buttons at the top of the page, and see what happens!
+                Here are some shots attached below to show what it should look
+                like (after clicking the respective buttons in the navbar):
+                <br>
+                <img
+                    src="/assets/lab-reports/simple-site-htmx-go/htmx-display-content-1.png"
+                    alt="The website layout from the previous image, but now
+                         containing the contents of the content-1.html file in
+                         the body">
+                <img
+                    src="/assets/lab-reports/simple-site-htmx-go/htmx-display-content-2.png"
+                    alt="The website layout from the previous image, but now
+                         containing the contents of the content-2.html file in
+                         the body">
+                <img
+                    src="/assets/lab-reports/simple-site-htmx-go/htmx-display-content-3.png"
+                    alt="The website layout from the previous image, but now
+                         containing the contents of the content-3.html file in
+                         the body">
+            </p>
+            <h2 id="a-problem-approaches">
+                What If We Navigate To A URL Directly Instead of Using The
+                Navbar?
+            </h2>
+            <p>
+                Well... about that... we don't exactly have a backend that
+                recognizes the difference between direct access to a URL and
+                HTMX requesting that URL. You can verify this yourself by
+                navigating to any of <code>localhost:8000/content-#.html</code>
+                URLs and you'll see these urls don't contain any of the styling
+                or the navbar we would have if we navigated to those URLs from
+                the base url of <code>localhost:8000/index.html</code>. Not only
+                is this a problem for users directly navigating to a URL, it's
+                also an issue for search engines and sharing content from a site
+                with others. To alleviate this, we'll be utilizing is a
+                technique called
+                <strong>"Server&nbsp;Side&nbsp;Rendering"</strong>.
+            </p>
+            <p>
+                To implement server side rendering, we will need to perform
+                these basic steps:
+                <ul>
+                    <li>
+                        Get the request from the client, this is pretty trivial
+                        with Gin
+                    </li>
+                    <li>
+                        Look for a specific header in the request that will
+                        allow us to differentiate between HTMX requests and
+                        normal traffic (whether that be users direct-navigating)
+                        or search engine crawlers indexing the site.
+                    </li>
+                    <li>
+                        If we see the HTMX request header, give only the
+                        fragment of the page, otherwise put the skeleton of the
+                        page <em>and</em> the content requested together on the
+                        server <em>before</em> sending it down the wire.
+                    </li>
+                    <li>
+                        <strong>IMPORTANT AND EASY TO MISS: </strong>
+                        Tell the browser to separate the cache between fragments
+                        and whole pages, so HTMX doesn't try to load the entire
+                        page when using the cache, and so the browser doesn't
+                        load fragments when direct-navigating to a page.
+                    </li>
+                </ul>
+            </p>
+            <h3 id="backend-step-gin-requests">
+                Gin: Getting Requests
+            </h3>
+            <p>
+                Before we start to talk about Gin itself, we should set up our
+                go project. In the folder containing your project, you should
+                run this command:
+                <br>
+                <code>go mod init main</code>
+                <br>
+                You can call this anything other than "main" I just use main
+                cause it's convenient to type. To setup gin as well, run this
+                command:
+                <br>
+                <code>go get -u github.com/gin-gonic/gin</code>
+                <br>
+                After this you should be set up to follow the rest of this
+                tutorial. Create a file name <code>main.go</code> and put this
+                code inside it to make sure it works.
+                <br>
+                <pre>
+                    <code>
+package main
+
+import (
+    "github.com/gin-gonic/gin"
+    "net/http"
+)
+
+func main() {
+    // Create a default gin router
+    router := gin.Default()
+
+    // Define a route for the root path
+    router.GET("/", func(c *gin.Context) {
+        c.JSON(http.StatusOK, gin.H{
+            "message": "Quick and Dirty HTMX+Go",
+        })
+    })
+
+    // Start the server on port 9001
+    router.Run(":9001")
+}
+                    </code>
+                </pre>
+                simply run <code>go run main.go</code> and when you visit the
+                page via <code>localhost:9001</code> you should see JSON output
+                saying "Quick and Dirty HTMX+Go"
+            </p>
+            <p>
+                To explain this code briefly, we instantiate a gin router object
+                using and use the <code>GET</code> function to define a URL and
+                what we should return for this URL. The first parameter of the
+                <code>GET</code> function is the URL's path, and the second is
+                a function that returns a gin context, which as far as I
+                understand is a class that contains all aspects of a response
+                that gin sends back down the wire. Finally, we tell Gin to run
+                the router at the specified port, in this case 9001. This covers
+                getting a request from the client, but what about request headers
+                and returning templated content?
+            </p>
+            <h3 id="backend-step-request-types">
+                Gin: Differentiating Between HTMX and Normal Traffic
+            </h3>
+            <p>
+                When HTMX issues an HTTP request, it's kind enough to attach a
+                "HX-Request" header to the traffic so that the backend can
+                differentiate between it and normal traffic. This makes things
+                extraordinarily easy. Once you know how to extract request
+                headers in Gin, sending HTMX and normal traffic down separate
+                code paths is trivial.
+                <br>
+                In the case of Gin, here's an example <code>router.GET</code>
+                call that extracts and tests the request header for "HX-Request"
+                <pre>
+                    <code>
+router.GET("/", func(c *gin.Context) {
+	hx_header := c.Request.Header.Get("HX-Request")
+	if(hx_header == "true") {
+		// Code path that returns the HTMX fragment.
+	} else {
+		// Code path that returns the whole page rendered server-side.
+	}
+})
+                    </code>
+                </pre>
+                The developers of Gin made it very convenient to extract the
+                header using <code>c.Request.Header.Get("$HEADER")</code>, and
+                since request headers are key:value pairs, we simply test for
+                the "true" value (it will be nil if the header doesn't exist
+                so we know for sure it comes from HTMX, or a client emulating
+                HTMX like someone using Postman to test the backend).
+            </p>
+            <h3 id="backend-step-template-HTMX">
+                Gin: Server Side Rendering With Templates
+            </h3>
+            <p>
+                Before we can work on templating in Gin, we need to add a little
+                bit to our <code>index.html</code> file to eventually tell our
+                templating system where to place the templates. Inside our
+                <code>index.html</code>, where the main section is, add this
+                snippet:
+                <br>
+                <pre>
+                    <code>
+&lt;main id=&quot;content&quot; class=&quot;width:100%&quot;&gt;
+    {{.Content}}
+&lt;/main&gt;
+                    </code>
+                </pre>
+            </p>
+            <p>
+                The double curly brackets alongside the ".Content" tell Go to
+                insert text in here as long as it belongs to a struct member
+                named "Content". This struct and the "Content" member will be
+                filled at runtime with the contents of our content-# html files.
+                <br>
+                While Gin contains its own templating system based on the
+                <code>http/template</code> library in Go, we can't use this for
+                HTMX since this library automatically escapes all html sent to
+                it. Keep in mind, <strong>99.999999%</strong> of the time this
+                is what you want, because if you are ingesting user-generated
+                content (which most sites are), you don't want them inserting
+                scripts into your site, and a lot of disasters can occur because
+                of this. However, since all the templates we're ingesting are
+                created by us, and hosted on a static server with only the
+                routes we specify, this shouldn't be an issue (unless your SSH
+                is compromised, which I can't help you with). Of course, always
+                validate your security concerns with a professional if you can.
+                I am just a goober on the internet with just enough technical
+                knowledge to commit cyberspace self-harm.
+            </p>
+            <h4 id="fine-ill-do-it-myself">
+                So How Are We Going To Do This Then?
+            </h4>
+            <p>
+                Well, since gin won't handle this for us, we'll just have to do
+                it ourselves.
+                <br>
+                <img src="/assets/lab-reports/simple-site-htmx-go/ill-do-it-myself.gif"
+                     alt="Thanos saying &quot;fine, I'll do it myself&quot;">
+                <br>
+                Normally this would be a daunting task, and to be honest it took
+                me a minute to figure out (learning Go as I went wasn't my best
+                idea lol), but at the end of the day it's pretty simple (if a
+                bit verbose). While the <code>http/template</code> library isn't
+                fit for our uses, Go does supply a <code>text/template</code>
+                library that's perfect for our use-case, since it templates text
+                in a dumb way (does no extra processing other than inserting
+                one piece of text into another). The process is as follows
+                (using "/index.html" and "/content-1.html" as the paths for our
+                skeleton and fragment respectively):
+                <br>
+                <pre>
+                    <code>
+// The struct that contains the content that we'll insert into the skeleton.
+type ContentfulResponse struct {
+	Content string
+}
+
+// allocate a buffer of bytes to hold the data for our finished template
+buf := new(bytes.Buffer)
+// grab the skeleton of our page (the index.html in our case), and check errors
+skel_html, err := os.ReadFile("/index.html")
+if err != nil {
+	fmt.Print(err)
+}
+// grab the fragment that would get handed to HTMX to add to our skeleton
+fragment_html, err := os.ReadFile("/content-1.html")
+if err != nil {
+	fmt.Print(err)
+}
+// create a new text template named "tmpl" and fill it with the skeleton, which
+// will have the fragment inserted into it when we execute the template.
+tmpl, err := template.New("tmpl").Parse(string(skel_html))
+if err != nil {
+	panic(err)
+}
+// add the fragment html to the ContentfulResponse struct
+resp := ContentfulResponse{string(fragment_html)}
+// Execute the template, writing into buf, and using resp as the struct we pull
+// .Content from. We set err equal to this cause this function returns an error
+// if something goes wrong.
+err = tmpl.Execute(buf, resp)
+if err != nil {
+	panic(err)
+}
+                    </code>
+                </pre>
+                <br>
+                Then after writing the final HTML into buf, we use
+                <br>
+                <code>c.Data(http.StatusOK, "text/html; charset=utf-8", buf.Bytes())</code>
+                <br>
+                to return the entire thing to whoever requested the entire page.
+                <br>
+                Now, with that sorted, it's time for the final boss of this
+                program.
+                <h3 id="backend-step-cache-separately">
+                    HTMX, Why You Use Wrong Page?
+                </h3>
+                <p>
+                    When getting my page up using HTMX and Go, I was having this
+                    bug where HTMX would grab the entire page and paste it into
+                    content area on my index.html. It took quite a while to
+                    debug this, but after messing around for a while, I learned
+                    that the issue is caching, or rather how HTMX and the
+                    browser interact with the cache.
+                </p>
+                <h4>Well, how <em>do</em> they interact?</h4>
+                <p>
+                    Simply put, when HTMX tries to grab a fragment, it first
+                    consults the browser cache to make sure it doesn't already
+                    have something to grab from, and unless your backend gives
+                    extra information, it will grab whatever is cached at a
+                    certain url whether it's the entire SSR page or a fragment
+                    that HTMX has grabbed before. This is even an issue if
+                    you're trying to navigate directly to a URL and your browser
+                    cached only the HTMX fragment so you just get a small amount
+                    of unstyled or minimally-styled HTML. In fact the latter
+                    behavior is what helped me determine the cause.
+                </p>
+                <p>
+                    Thankfully... the solution is really simple, and is quite
+                    well explained on
+                    <a href="https://htmx.org/docs/#caching" target="_blank">
+                        the htmx docs.
+                    </a>
+                    I quite remember getting hit with an RTFM moment when I read
+                    this section (while trying to solve the problem).
+                </p>
+                <p>
+                    Just like requests, your backend can also send back response
+                    headers, and you can use these to send extra metadata down
+                    the wire. In our case telling the browser to store separate
+                    caches for responses made with and without "HX-Request".
+                    It's just as simple as adding a "Vary: HX-Request" into our
+                    response header and we're good to go, and in gin we can do
+                    that with just a single line of code in our response:
+                    <br>
+                    <code>c.Header("Vary", "HX-Request")</code>
+                </p>
+                <h2 id="putting-it-all-together">
+                    Putting It All Together: Our Final Code
+                </h2>
+                <p>
+                    With all of the preamble out of the way, it's time to put it
+                    all together and create a backend that can handle HTMX and
+                    do server side rendering.
+                    <br>
+                    This is the final code for our backend that can return HTML
+                    fragments to HTMX and also render full pages for direct
+                    navigation. This backend can also handle refreshes and
+                    history too.
+                    <br>
+                    <pre>
+                        <code>
+package main
+
+import (
+	"os"
+	"text/template"
+	"fmt"
+    "net/http"
+	"bytes"
+    "github.com/gin-gonic/gin"
+)
+
+type ContentfulResponse struct {
+	Content string
+}
+
+func ReturnContentfulPage(c *gin.Context, skeleton_path string, fragment_path string) {
+	// allocate a buffer of bytes to hold the data for our finished template
+	buf := new(bytes.Buffer)
+	// grab the skeleton of our page, and check errors
+	skel_html, err := os.ReadFile(skeleton_path)
+	if err != nil {
+		fmt.Print(err)
+	}
+	// grab the fragment that would get handed to HTMX to add to our skeleton
+	fragment_html, err := os.ReadFile(fragment_path)
+	if err != nil {
+		fmt.Print(err)
+	}
+	// create a new text template named "tmpl" and fill it with the skeleton, which
+	// will have the fragment inserted into it when we execute the template.
+	tmpl, err := template.New("tmpl").Parse(string(skel_html))
+	if err != nil {
+		panic(err)
+	}
+	// add the fragment html to the ContentfulResponse struct
+	resp := ContentfulResponse{string(fragment_html)}
+	// Execute the template, writing into buf, and using resp as the struct we pull
+	// .Content from. We set err equal to this cause this function returns an error
+	// if something goes wrong.
+	err = tmpl.Execute(buf, resp)
+	if err != nil {
+		panic(err)
+	}
+
+	// Return data using buf, turning the buf into a byte array using buf.Bytes()
+	c.Data(http.StatusOK, "text/html; charset=utf-8", buf.Bytes())
+
+}
+
+func ReturnFragment(c *gin.Context, fragment_path string) {
+	fragment_html, err := os.ReadFile(fragment_path)
+	if err != nil {
+		fmt.Print(err)
+	}
+
+	// return the fragment, converting the fragment string into a byte array
+	c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(fragment_html))
+}
+
+func main() {
+    // Create a default gin router
+    router := gin.Default()
+
+    // Define a route for the root path
+    // In the case of this tutorial, we're considering content-1 to be the
+    // home page
+    router.GET("/", func(c *gin.Context) {
+		// get the header and store it in hx_header
+		hx_header := c.Request.Header.Get("HX-Request")
+		// Set the Vary key in the header to HX-Request so the browser will
+		// store separate caches for contentful pages and fragments
+		c.Header("Vary", "HX-Request")
+		if(hx_header == "true") {
+			ReturnFragment(c, "./content-1.html")
+		} else {
+			ReturnContentfulPage(c, "./index.html", "./content-1.html")
+		}
+    })
+    router.GET("/content-2", func(c *gin.Context) {
+		// get the header and store it in hx_header
+		hx_header := c.Request.Header.Get("HX-Request")
+		// Set the Vary key in the header to HX-Request so the browser will
+		// store separate caches for contentful pages and fragments
+		c.Header("Vary", "HX-Request")
+		if(hx_header == "true") {
+			ReturnFragment(c, "./content-2.html")
+		} else {
+			ReturnContentfulPage(c, "./index.html", "./content-2.html")
+		}
+    })
+    router.GET("/content-3", func(c *gin.Context) {
+		// get the header and store it in hx_header
+		hx_header := c.Request.Header.Get("HX-Request")
+		// Set the Vary key in the header to HX-Request so the browser will
+		// store separate caches for contentful pages and fragments
+		c.Header("Vary", "HX-Request")
+		if(hx_header == "true") {
+			ReturnFragment(c, "./content-3.html")
+		} else {
+			ReturnContentfulPage(c, "./index.html", "./content-3.html")
+		}
+    })
+
+    // Start the server on port 9001
+    router.Run(":9001")
+}
+                        </code>
+                    </pre>
+                    And since we've defined custom endpoints for our files, we
+                    need to update the HTML to access those endpoints on our
+                    backend. Here is the updated HTML for that too:
+                    <br>
+                    <pre>
+                        <code>
+&lt;!doctype html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;utf-8&quot;&gt;
+        &lt;script src=&quot;https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js&quot; integrity=&quot;sha384-/TgkGk7p307TH7EXJDuUlgG3Ce1UVolAOFopFekQkkXihi5u/6OCvVKyz1W+idaz&quot; crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;
+        &lt;link rel=stylesheet href=https://unpkg.com/missing.css@1.2.0&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;header class=&quot;navbar width:100%&quot;&gt;
+            &lt;nav aria-label=&quot;site-sections&quot;&gt;
+                &lt;ul role=&quot;list&quot; class=&quot;flex-row flex-wrap:wrap&quot;&gt;
+                    &lt;li&gt;
+                        &lt;strong&gt;
+                            &lt;button
+                                hx-get=&quot;/&quot;
+                                hx-target=&quot;#content&quot;
+                                hx-swap=&quot;innerHTML&quot;
+                                hx-trigger=&quot;click&quot;
+                                hx-push-url=&quot;true&quot;&gt;
+                                content-1
+                            &lt;/button&gt;
+                        &lt;/strong&gt;
+                    &lt;/li&gt;
+                    &lt;li&gt;
+                        &lt;strong&gt;
+                            &lt;button
+                                hx-get=&quot;/content-2&quot;
+                                hx-target=&quot;#content&quot;
+                                hx-swap=&quot;innerHTML&quot;
+                                hx-trigger=&quot;click&quot;
+                                hx-push-url=&quot;true&quot;&gt;
+                                content-2
+                            &lt;/button&gt;
+                        &lt;/strong&gt;
+                    &lt;/li&gt;
+                    &lt;li&gt;
+                        &lt;strong&gt;
+                            &lt;button
+                                hx-get=&quot;/content-3&quot;
+                                hx-target=&quot;#content&quot;
+                                hx-swap=&quot;innerHTML&quot;
+                                hx-trigger=&quot;click&quot;
+                                hx-push-url=&quot;true&quot;&gt;
+                                content-3
+                            &lt;/button&gt;
+                        &lt;/strong&gt;
+                    &lt;/li&gt;
+                &lt;/ul&gt;
+            &lt;/nav&gt;
+        &lt;/header&gt;
+        &lt;main id=&quot;content&quot; class=&quot;width:100%&quot;&gt;
+            {{.Content}}
+        &lt;/main&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+                        </code>
+                    </pre>
+                    That's it, for our backend and frontend demo. You can not
+                    only use HTMX for navigating sub-pages, but the backend
+                    handles server-side rendering so you can directly navigate
+                    to pages, share them, and search engine crawlers can index
+                    your page in full.
+                </p>
+                <h2 id="extra-credit-dockerize">
+                    Extra Credit: Containerize Me Capt'n
+                </h2>
+                <p>
+                    If we want to make these easily deployable, we can add a
+                    simple Dockerfile and build this in our docker-compose.yml
+                    file that we use to boot up all of our other containerized
+                    services. A tutorial on Dockerfiles and docker compose is
+                    well outside the scope of this tutorial (and tbh I'm running
+                    out of brainpower as I try to finish this article), but
+                    here's a simple Dockerfile and docker compose file that will
+                    get you running.
+                    <br>
+                    <pre>
+                        <code>
+# Dockerfile
+FROM golang:latest AS base
+
+# Set working directory
+WORKDIR /app
+
+COPY . .
+
+RUN go mod download && go build -o htmx-backend
+
+EXPOSE 9001
+
+CMD ["/app/htmx-backend"]
+                        </code>
+                    </pre>
+                    <pre>
+                        <code>
+# docker-compose.yml
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: "htmx-backend"
+    ports:
+      - "9001:9001"
+    network_mode: "host"
+    environment:
+      - GIN_MODE=release
+                        </code>
+                    </pre>
+                </p>
+                <p>
+                    Simply run <code>docker compose up --build -d</code> in the
+                    folder you put this and all your other project files in and
+                    you can run a containerized version of your website.
+                </p>
+    </article>
+    <aside class="toc box" data-cols="6 7">
+        <ol>
+            <li>
+                <a href="#intro">Hello From HTMX and GO!!!</a>
+            </li>
+            <li>
+                <a href="#get-to-the-point">Where are you going with this?</a>
+            </li>
+            <li>
+                <a href="#outline">What Does This Tutorial Consist of</a>
+            </li>
+            <li>
+                <a href="#frontend-step">Getting Started: Initiating HTMX</a>
+            </li>
+            <ol>
+                <li>
+                    <a href="#frontend-step-index-html">index.html, The Skeleton of Our Content</a>
+                </li>
+                <li>
+                        <a href="#frontend-step-content">Populating The Content Files to Test HTMX</a>
+                </li>
+            </ol>
+            <li>
+                <a href="#a-problem-approaches">What If We Navigate To A URL Directly Instead of Using The Navbar?</a>
+            </li>
+            <ol>
+                <li>
+                    <a href="#backend-step-gin-requests">Gin: Getting Requests</a>
+                </li>
+                <li>
+                    <a href="#backend-step-request-types">Gin: Differentiating Between HTMX and Normal Traffic</a>
+                </li>
+                <li>
+                    <a href="#backend-step-template-HTMX">Gin: Server Side Rendering With Templates</a>
+                </li>
+                <ol>
+                    <li>
+                        <a href="#fine-ill-do-it-myself">So How Are We Going To Do This Then?</a>
+                    </li>
+                </ol>
+                <li>
+                    <a href="#backend-step-cache-separately">HTMX, Why You Use Wrong Page?</a>
+                </li>
+            </ol>
+            <li>
+                <a href="#putting-it-all-together">Putting It All Together: Our Final Code</a>
+            </li>
+            <li>
+                <a href="#extra-credit-dockerize">Extra Credit: Containerize Me Capt'n</a>
+            </li>
+        </ol>
+    </aside>
+</div>
