@@ -45,6 +45,7 @@ func ReturnPartial(c *gin.Context, partial_path string) {
 	if err != nil {
 		fmt.Print(err)
 	}
+
 	c.Data(http.StatusOK, "text/html; charset=utf-8", []byte(partial_html))
 }
 
@@ -65,21 +66,52 @@ func main() {
 		c.File("./assets/favicon.ico")
 	})
 
+	/*
+	 * Some things to know for HTMX implementers using Gin:
+	 * 		Gin's templating system assumes the template is user-generated or
+	 * 		comes from an otherwise unsafe source, so we have to do a workaround
+	 * 		in the ReturnContentfulPage function to just template the raw text
+	 * 		and return it as HTML so HTMX can actually use it. If you're just
+	 * 		using HTMX to return fragments of plain text, this isn't a problem,
+	 * 		but if you want rich HTML in your HTMX requests you have to do this.
+	 *
+	 * 		The default behavior is preferred in 99% of cases, because you don't
+	 * 		want users uploading <script> tags to your site and injecting
+	 * 		malware for other users or your backend (depending on how your
+	 * 		backend works and what the script can access), but for HTMX and the
+	 * 		backend returning HTML fragments for the page to load, this isn't
+	 * 		a feasible way to load content with HTMX.
+	 *
+	 * 		If I ever add a feature for user-generated text to be uploaded to
+	 * 		the site, I will use the default templating system which escapes
+	 * 		HTML to prevent cross site scripting and other types of attacks.
+	 *
+	 * 		Caching is also your biggest enemy, when your browser caches an
+	 * 		endpoint, HTMX will also use that cached page in its request to
+	 * 		avoid having to make requests to the server. This can result in
+	 * 		either HTMX using the whole page as a fragment, or the user not
+	 * 		receiving the whole page when starting from a non-root endpoint (if
+	 * 		they have already visited that page before using a link/button in
+	 * 		HTMX).
+	 *
+	 * 		The HTMX docs have some extra info on how to deal with caching here:
+	 * 		https://htmx.org/docs/#caching
+	 */
 	router.GET("/", func(c *gin.Context) {
-		// apparently on some environments the request header is caps sensitive?
-		// from some debug information I had obtained before it looked like the
-		// header was "Hx-Request" not "HX-Request" but I think the firefox
-		// dev tools are probably more truthful than whatever I was using to
-		// get debug info before.
+		// fix for HTMX cache issues
+		// https://htmx.org/docs/#caching
+		c.Header("Vary", "HX-Request")
 		hx_header := c.Request.Header.Get("HX-Request")
 		if(hx_header == "true") {
-			fmt.Print("return partial for /\n")
 			ReturnPartial(c, "./hypertext/index.html")
 		} else {
 			ReturnContentfulPage(c, "./hypertext/base.html", "./hypertext/index.html")
 		}
 	})
 	router.GET("/lab-reports", func(c *gin.Context) {
+		// fix for HTMX cache issues
+		// https://htmx.org/docs/#caching
+		c.Header("Vary", "HX-Request")
 		hx_header := c.Request.Header.Get("HX-Request")
 		if(hx_header == "true") {
 			ReturnPartial(c, "./hypertext/lab-reports/reports-index.html")
@@ -88,6 +120,9 @@ func main() {
 		}
 	})
 	router.GET("/projects", func(c *gin.Context) {
+		// fix for HTMX cache issues
+		// https://htmx.org/docs/#caching
+		c.Header("Vary", "HX-Request")
 		hx_header := c.Request.Header.Get("HX-Request")
 		if(hx_header == "true") {
 			ReturnPartial(c, "./hypertext/projects/projects-index.html")
@@ -96,6 +131,9 @@ func main() {
 		}
 	})
 	router.GET("/tunes-town", func(c *gin.Context) {
+		// fix for HTMX cache issues
+		// https://htmx.org/docs/#caching
+		c.Header("Vary", "HX-Request")
 		hx_header := c.Request.Header.Get("HX-Request")
 		if(hx_header == "true") {
 			ReturnPartial(c, "./hypertext/tunes-town.html")
@@ -104,6 +142,9 @@ func main() {
 		}
 	})
 	router.GET("/gallery", func(c *gin.Context) {
+		// fix for HTMX cache issues
+		// https://htmx.org/docs/#caching
+		c.Header("Vary", "HX-Request")
 		hx_header := c.Request.Header.Get("HX-Request")
 		if(hx_header == "true") {
 			ReturnPartial(c, "./hypertext/gallery.html")
@@ -112,6 +153,9 @@ func main() {
 		}
 	})
 	router.GET("/museum", func(c *gin.Context) {
+		// fix for HTMX cache issues
+		// https://htmx.org/docs/#caching
+		c.Header("Vary", "HX-Request")
 		hx_header := c.Request.Header.Get("HX-Request")
 		if(hx_header == "true") {
 			ReturnPartial(c, "./hypertext/museum.html")
@@ -120,6 +164,9 @@ func main() {
 		}
 	})
 	router.GET("/adventure-map", func(c *gin.Context) {
+		// fix for HTMX cache issues
+		// https://htmx.org/docs/#caching
+		c.Header("Vary", "HX-Request")
 		hx_header := c.Request.Header.Get("HX-Request")
 		if(hx_header == "true") {
 			ReturnPartial(c, "./hypertext/adventure-map.html")
