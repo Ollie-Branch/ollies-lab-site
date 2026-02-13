@@ -66,15 +66,21 @@ func main() {
 	})
 
 	router.GET("/", func(c *gin.Context) {
-		hx_header := c.Request.Header.Get("Hx-Request")
+		// apparently on some environments the request header is caps sensitive?
+		// from some debug information I had obtained before it looked like the
+		// header was "Hx-Request" not "HX-Request" but I think the firefox
+		// dev tools are probably more truthful than whatever I was using to
+		// get debug info before.
+		hx_header := c.Request.Header.Get("HX-Request")
 		if(hx_header == "true") {
+			fmt.Print("return partial for /\n")
 			ReturnPartial(c, "./hypertext/index.html")
 		} else {
 			ReturnContentfulPage(c, "./hypertext/base.html", "./hypertext/index.html")
 		}
 	})
 	router.GET("/lab-reports", func(c *gin.Context) {
-		hx_header := c.Request.Header.Get("Hx-Request")
+		hx_header := c.Request.Header.Get("HX-Request")
 		if(hx_header == "true") {
 			ReturnPartial(c, "./hypertext/lab-reports/reports-index.html")
 		} else {
@@ -82,7 +88,7 @@ func main() {
 		}
 	})
 	router.GET("/projects", func(c *gin.Context) {
-		hx_header := c.Request.Header.Get("Hx-Request")
+		hx_header := c.Request.Header.Get("HX-Request")
 		if(hx_header == "true") {
 			ReturnPartial(c, "./hypertext/projects/projects-index.html")
 		} else {
@@ -90,7 +96,7 @@ func main() {
 		}
 	})
 	router.GET("/tunes-town", func(c *gin.Context) {
-		hx_header := c.Request.Header.Get("Hx-Request")
+		hx_header := c.Request.Header.Get("HX-Request")
 		if(hx_header == "true") {
 			ReturnPartial(c, "./hypertext/tunes-town.html")
 		} else {
@@ -98,7 +104,7 @@ func main() {
 		}
 	})
 	router.GET("/gallery", func(c *gin.Context) {
-		hx_header := c.Request.Header.Get("Hx-Request")
+		hx_header := c.Request.Header.Get("HX-Request")
 		if(hx_header == "true") {
 			ReturnPartial(c, "./hypertext/gallery.html")
 		} else {
@@ -106,7 +112,7 @@ func main() {
 		}
 	})
 	router.GET("/museum", func(c *gin.Context) {
-		hx_header := c.Request.Header.Get("Hx-Request")
+		hx_header := c.Request.Header.Get("HX-Request")
 		if(hx_header == "true") {
 			ReturnPartial(c, "./hypertext/museum.html")
 		} else {
@@ -114,7 +120,7 @@ func main() {
 		}
 	})
 	router.GET("/adventure-map", func(c *gin.Context) {
-		hx_header := c.Request.Header.Get("Hx-Request")
+		hx_header := c.Request.Header.Get("HX-Request")
 		if(hx_header == "true") {
 			ReturnPartial(c, "./hypertext/adventure-map.html")
 		} else {
