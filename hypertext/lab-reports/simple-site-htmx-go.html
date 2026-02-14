@@ -3,15 +3,94 @@
     loop to populate the static title of the content server-side for SSR, or
     maybe I'll make a config file that populates this and the SSR data structure
     idk. -->
-    <script id="document-title">
+    <script id="document-setup">
      document.title = "Quick and Dirty HTMX+Go"
+     document.querySelectorAll('pre > code').forEach(el => {
+         const btn = document.createElement('span');
+         btn.className = 'copy-button';
+         btn.onclick = () => {
+             navigator.clipboard.writeText(el.innerText);
+             alert("text copied")
+         }
+         el.parentNode.append(btn);
+     });
     </script>
-    <div data-cols="1 2">
-    <article class="box" data-cols="3 5">
-        <h1 id="visible-article-title">
+    <style>
+     pre {
+         position: relative;
+         white-space: pre-wrap;
+     }
+     .copy-button {
+         position: absolute;
+         top: 0;
+         right: 0;
+         inset: 5px 5px auto auto;
+         width: 1em; height: 1em;
+         border: 1px solid;
+         box-shadow: -3px 3px #999;
+     }
+     .toc {
+         position: sticky;
+         top: 120px;
+     }
+    </style>
+    <aside class="toc box" data-cols="1" data-rows="1 2">
+        <ol>
+            <li>
+                <a href="#intro">Hello From HTMX and GO!!!</a>
+            </li>
+            <li>
+                <a href="#get-to-the-point">Where are you going with this?</a>
+            </li>
+            <li>
+                <a href="#outline">What Does This Tutorial Consist of</a>
+            </li>
+            <li>
+                <a href="#frontend-step">Getting Started: Initiating HTMX</a>
+            </li>
+            <ol>
+                <li>
+                    <a href="#frontend-step-index-html">index.html, The Skeleton of Our Content</a>
+                </li>
+                <li>
+                        <a href="#frontend-step-content">Populating The Content Files to Test HTMX</a>
+                </li>
+            </ol>
+            <li>
+                <a href="#a-problem-approaches">What If We Navigate To A URL Directly Instead of Using The Navbar?</a>
+            </li>
+            <ol>
+                <li>
+                    <a href="#backend-step-gin-requests">Gin: Getting Requests</a>
+                </li>
+                <li>
+                    <a href="#backend-step-request-types">Gin: Differentiating Between HTMX and Normal Traffic</a>
+                </li>
+                <li>
+                    <a href="#backend-step-template-HTMX">Gin: Server Side Rendering With Templates</a>
+                </li>
+                <ol>
+                    <li>
+                        <a href="#fine-ill-do-it-myself">So How Are We Going To Do This Then?</a>
+                    </li>
+                </ol>
+                <li>
+                    <a href="#backend-step-cache-separately">HTMX, Why You Use Wrong Page?</a>
+                </li>
+            </ol>
+            <li>
+                <a href="#putting-it-all-together">Putting It All Together: Our Final Code</a>
+            </li>
+            <li>
+                <a href="#extra-credit-dockerize">Extra Credit: Containerize Me Capt'n</a>
+            </li>
+        </ol>
+    </aside>
+    <article class="box" data-cols="2 4" data-rows="1 10">
+        <h1 id="visible-article-title" class="flex-row justify-content:center align-items:center">
             Quick and Dirty HTMX+Go
         </h1>
-        <h2 id="intro">
+        <h2 id="intro" class="flex-row justify-content:center align-items:center">
             Hello From HTMX and GO!!!
         </h2>
         <p>
@@ -39,7 +118,7 @@
             <a href="https://github.com/Ollie-Branch/tutorial-htmx-go"
                target="_blank">here.</a>
         </p>
-        <h2 id="get-to-the-point">
+        <h2 id="get-to-the-point" class="flex-row justify-content:center align-items:center">
             Where are you going with this?
         </h2>
         <p>
@@ -55,7 +134,7 @@
             be the change I want to see in the world, and create a (hopefully)
             super quick tutorial on how to get started with HTMX+Go.
         </p>
-        <h2 id="outline">
+        <h2 id="outline" class="flex-row justify-content:center align-items:center">
             What does this tutorial consist of?
         </h2>
         <p>
@@ -80,11 +159,7 @@
             You will also probably need these things to build the test site:
             <ul>
                 <li>
-                    A working go installation (since I'm on an immutable distro
-                    I use an arch distrobox with all my dev tools on it exported
-                    to the host but your package manager should have it
-                    available, or if you're on windows you can install it from
-                    their website).
+                    A working go installation 
                 </li>
                 <li>
                     A working installation of python isn't necessary to build
@@ -113,7 +188,7 @@
             since the previous statement will only get more out of
             date as time goes on.
 
-            <h2 id="frontend-step">
+            <h2 id="frontend-step" class="flex-row justify-content:center align-items:center">
                 Getting Started: Initiating HTMX
             </h2>
             <p>
@@ -127,7 +202,7 @@
                 markup in and where we'll call HTMX function in our code which
                 our backend will interpret.
             </p>
-            <h3 id="frontend-step-index-html">
+            <h3 id="frontend-step-index-html" class="flex-row justify-content:center align-items:center">
                 index.html, The Skeleton of Our Content
             </h3>
             <p>
@@ -277,7 +352,7 @@
                     </li>
                 </ul>
             </p>
-            <h3 id="frontend-step-content">
+            <h3 id="frontend-step-content" class="flex-row justify-content:center align-items:center">
                 Populating The Content Files to Test HTMX
             </h3>
             <p>
@@ -337,7 +412,7 @@
                          containing the contents of the content-3.html file in
                          the body">
             </p>
-            <h2 id="a-problem-approaches">
+            <h2 id="a-problem-approaches" class="flex-row justify-content:center align-items:center">
                 What If We Navigate To A URL Directly Instead of Using The
                 Navbar?
             </h2>
@@ -366,8 +441,8 @@
                     <li>
                         Look for a specific header in the request that will
                         allow us to differentiate between HTMX requests and
-                        normal traffic (whether that be users direct-navigating)
-                        or search engine crawlers indexing the site.
+                        normal traffic (whether that be users direct-navigating
+                        or search engine crawlers indexing the site).
                     </li>
                     <li>
                         If we see the HTMX request header, give only the
@@ -384,7 +459,7 @@
                     </li>
                 </ul>
             </p>
-            <h3 id="backend-step-gin-requests">
+            <h3 id="backend-step-gin-requests" class="flex-row justify-content:center align-items:center">
                 Gin: Getting Requests
             </h3>
             <p>
@@ -445,7 +520,7 @@ func main() {
                 getting a request from the client, but what about request headers
                 and returning templated content?
             </p>
-            <h3 id="backend-step-request-types">
+            <h3 id="backend-step-request-types" class="flex-row justify-content:center align-items:center">
                 Gin: Differentiating Between HTMX and Normal Traffic
             </h3>
             <p>
@@ -477,7 +552,7 @@ router.GET("/", func(c *gin.Context) {
                 so we know for sure it comes from HTMX, or a client emulating
                 HTMX like someone using Postman to test the backend).
             </p>
-            <h3 id="backend-step-template-HTMX">
+            <h3 id="backend-step-template-HTMX" class="flex-row justify-content:center align-items:center">
                 Gin: Server Side Rendering With Templates
             </h3>
             <p>
@@ -516,7 +591,7 @@ router.GET("/", func(c *gin.Context) {
                 I am just a goober on the internet with just enough technical
                 knowledge to commit cyberspace self-harm.
             </p>
-            <h4 id="fine-ill-do-it-myself">
+            <h4 id="fine-ill-do-it-myself" class="flex-row justify-content:center align-items:center">
                 So How Are We Going To Do This Then?
             </h4>
             <p>
@@ -533,7 +608,7 @@ router.GET("/", func(c *gin.Context) {
                 fit for our uses, Go does supply a <code>text/template</code>
                 library that's perfect for our use-case, since it templates text
                 in a dumb way (does no extra processing other than inserting
-                one piece of text into another). The process is as follows
+                one piece of text into another). This example shows the process
                 (using "/index.html" and "/content-1.html" as the paths for our
                 skeleton and fragment respectively):
                 <br>
@@ -582,7 +657,7 @@ if err != nil {
                 <br>
                 Now, with that sorted, it's time for the final boss of this
                 program.
-                <h3 id="backend-step-cache-separately">
+                <h3 id="backend-step-cache-separately" class="flex-row justify-content:center align-items:center">
                     HTMX, Why You Use Wrong Page?
                 </h3>
                 <p>
@@ -626,7 +701,7 @@ if err != nil {
                     <br>
                     <code>c.Header("Vary", "HX-Request")</code>
                 </p>
-                <h2 id="putting-it-all-together">
+                <h2 id="putting-it-all-together" class="flex-row justify-content:center align-items:center">
                     Putting It All Together: Our Final Code
                 </h2>
                 <p>
@@ -644,11 +719,11 @@ if err != nil {
 package main
 
 import (
-	"os"
-	"text/template"
-	"fmt"
+    "os"
+    "text/template"
+    "fmt"
     "net/http"
-	"bytes"
+    "bytes"
     "github.com/gin-gonic/gin"
 )
 
@@ -751,7 +826,9 @@ func main() {
                     </pre>
                     And since we've defined custom endpoints for our files, we
                     need to update the HTML to access those endpoints on our
-                    backend. Here is the updated HTML for that too:
+                    backend. Here is the updated HTML for that too (All of the
+                    updates are for the <code>hx-get</code> methods to request
+                    the new URLs that we defined in our backend):
                     <br>
                     <pre>
                         <code>
@@ -818,7 +895,7 @@ func main() {
                     to pages, share them, and search engine crawlers can index
                     your page in full.
                 </p>
-                <h2 id="extra-credit-dockerize">
+                <h2 id="extra-credit-dockerize" class="flex-row justify-content:center align-items:center">
                     Extra Credit: Containerize Me Capt'n
                 </h2>
                 <p>
@@ -871,56 +948,5 @@ services:
                     you can run a containerized version of your website.
                 </p>
     </article>
-    <aside class="toc box" data-cols="6 7">
-        <ol>
-            <li>
-                <a href="#intro">Hello From HTMX and GO!!!</a>
-            </li>
-            <li>
-                <a href="#get-to-the-point">Where are you going with this?</a>
-            </li>
-            <li>
-                <a href="#outline">What Does This Tutorial Consist of</a>
-            </li>
-            <li>
-                <a href="#frontend-step">Getting Started: Initiating HTMX</a>
-            </li>
-            <ol>
-                <li>
-                    <a href="#frontend-step-index-html">index.html, The Skeleton of Our Content</a>
-                </li>
-                <li>
-                        <a href="#frontend-step-content">Populating The Content Files to Test HTMX</a>
-                </li>
-            </ol>
-            <li>
-                <a href="#a-problem-approaches">What If We Navigate To A URL Directly Instead of Using The Navbar?</a>
-            </li>
-            <ol>
-                <li>
-                    <a href="#backend-step-gin-requests">Gin: Getting Requests</a>
-                </li>
-                <li>
-                    <a href="#backend-step-request-types">Gin: Differentiating Between HTMX and Normal Traffic</a>
-                </li>
-                <li>
-                    <a href="#backend-step-template-HTMX">Gin: Server Side Rendering With Templates</a>
-                </li>
-                <ol>
-                    <li>
-                        <a href="#fine-ill-do-it-myself">So How Are We Going To Do This Then?</a>
-                    </li>
-                </ol>
-                <li>
-                    <a href="#backend-step-cache-separately">HTMX, Why You Use Wrong Page?</a>
-                </li>
-            </ol>
-            <li>
-                <a href="#putting-it-all-together">Putting It All Together: Our Final Code</a>
-            </li>
-            <li>
-                <a href="#extra-credit-dockerize">Extra Credit: Containerize Me Capt'n</a>
-            </li>
-        </ol>
-    </aside>
+    <div data-cols="5" data-rows="1 5"></div>
 </div>

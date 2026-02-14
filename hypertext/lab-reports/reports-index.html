@@ -7,7 +7,21 @@
     <script id="document-title">
      document.title = "\"Lab Reports\""
     </script>
-    <aside class="box" data-cols="1" data-rows="1 5"></aside>
-    <article class="box" data-cols="2 5" data-rows="1 5">This is the lab reports section of the site</article>
-    <nav id="toc" class="box" data-cols="6" data-rows="1 5"></nav>
+    <div data-cols="1" data-rows="1 5"></div>
+    <article class="box" data-cols="2 5" data-rows="1 5">
+        Articles from February 2026:
+        <ol>
+            <li>
+                <button
+                    hx-get="/lab-reports/simple-site-htmx-go"
+                    hx-target="#content"
+                    hx-swap="innerHTML"
+                    hx-trigger="click"
+                    hx-push-url="true">
+                    Quick and Dirty HTMX+Go
+                </button>
+            </li>
+        </ol>
+    </article>
+    <div data-cols="6" data-rows="1 5"></div>
 </div>
