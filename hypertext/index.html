@@ -160,16 +160,49 @@
             there's a risk of the image link becoming dead.
         </p>
         </div>
+        <div class="box">
         <h1>
             TODO:
         </h1>
-        <p>
-            Move away from missing.css and onto my own stylesheets, this is
-            a placeholder solution to buy me time to work on the backend and
-            content a little bit.
-        </p>
-        <p>
-            Add RSS Feed Support
-        </p>
+        <ul role="list">
+            <li class="box bad color">
+                <p>
+                    Fix bug where the copy buttons aren't available on a blog
+                    post when directly navigating to its link. They are
+                    available by navigating to it from the homepage but
+                    something gets busted in the process of server side
+                    rendering.
+                </p>
+            </li>
+            <li class="box info color">
+                <p>
+                    Make the backend more scalable, I'm thinking a rudimentary setup
+                    would be a tsv file on the backend that defines all the
+                    endpoints and metadata the server needs for SSR. Maybe
+                    re-scanning the file every once in a while to repopulate it
+                    so I don't have to rebuild or re-run the backend every time.
+                    <br> <br>
+                    Maybe I could make something that automagically populates
+                    the tsv based on metadata in the html documents themselves?
+                    Attach it to a script that traverses the directory tree and
+                    reads headers perhaps. This would make updates easier if the
+                    directory tree changes and prevent dead links from
+                    accumulating.
+                </p>
+            </li>
+            <li class="box info color">
+                <p>
+                    Move away from missing.css and onto my own stylesheets, this is
+                    a placeholder solution to buy me time to work on the backend and
+                    content a little bit.
+                </p>
+            </li>
+            <li class="box info color">
+                <p>
+                    Add RSS Feed Support
+                </p>
+            </li>
+        </ul>
+        </div>
     </aside>
 </div>
