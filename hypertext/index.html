@@ -176,18 +176,12 @@
             </li>
             <li class="box info color">
                 <p>
-                    Make the backend more scalable, I'm thinking a rudimentary setup
-                    would be a tsv file on the backend that defines all the
-                    endpoints and metadata the server needs for SSR. Maybe
-                    re-scanning the file every once in a while to repopulate it
-                    so I don't have to rebuild or re-run the backend every time.
-                    <br> <br>
-                    Maybe I could make something that automagically populates
-                    the tsv based on metadata in the html documents themselves?
-                    Attach it to a script that traverses the directory tree and
-                    reads headers perhaps. This would make updates easier if the
-                    directory tree changes and prevent dead links from
-                    accumulating.
+                    I have made the server more scalable using a TOML file to
+                    define all the endpoints, but I still need to make it
+                    re-scan when the file changes to update the urls. This would
+                    require also decoupling the containerized backend from the
+                    frontend, using a volume to contain the frontend's data
+                    instead of just copying it into an immutable container.
                 </p>
             </li>
             <li class="box info color">
