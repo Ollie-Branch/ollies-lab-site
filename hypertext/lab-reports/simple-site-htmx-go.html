@@ -3,40 +3,11 @@
     loop to populate the static title of the content server-side for SSR, or
     maybe I'll make a config file that populates this and the SSR data structure
     idk. -->
-    <script id="document-setup">
-        document.title = "Quick and Dirty HTMX+Go"
-        document.querySelectorAll('pre > code').forEach(el => {
-            const btn = document.createElement('span');
-            btn.className = 'copy-button';
-            btn.onclick = () => {
-                navigator.clipboard.writeText(el.innerText);
-                alert("text copied")
-            }
-            el.parentNode.append(btn);
-        });
+    <script>
+        document.title = "Quick And Dirty HTMX+Go"
     </script>
-    <style>
-        pre {
-            position: relative;
-            white-space: pre-wrap;
-        }
-
-        .copy-button {
-            position: absolute;
-            top: 0;
-            right: 0;
-            inset: 5px 5px auto auto;
-            width: 1em;
-            height: 1em;
-            border: 1px solid;
-            box-shadow: -3px 3px #999;
-        }
-
-        .toc {
-            position: sticky;
-            top: 120px;
-        }
-    </style>
+    <script src="/scripts/copy-button-code-block.js"></script>
+    <link rel="stylesheet" href="/styles/code-block.css">
     <aside class="toc box" data-cols="1" data-rows="1 2">
         <ol>
             <li>

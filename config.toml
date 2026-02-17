@@ -1,0 +1,47 @@
+[[page]]
+    url="/"
+    skeleton-path="./hypertext/base.html"
+    content-path="./hypertext/index.html"
+    title="Ollie's Lab"
+
+[[page]]
+    url="/lab-reports"
+    skeleton-path="./hypertext/base.html"
+    content-path="./hypertext/lab-reports/reports-index.html"
+    title="\"Lab Reports\""
+
+[[page]]
+    url="/lab-reports/simple-site-go-htmx"
+    skeleton-path="./hypertext/base.html"
+    content-path="./hypertext/lab-reports/simple-site-htmx-go.html"
+    title="Quick & Dirty HTMX+Go"
+
+[[page]]
+    url="/tunes-town"
+    skeleton-path="./hypertext/base.html"
+    content-path="./hypertext/tunes-town.html"
+    title="Tunes Town"
+
+[[page]]
+    url="/projects"
+    skeleton-path="./hypertext/base.html"
+    content-path="./hypertext/projects/projects-index.html"
+    title="Projects"
+
+[[page]]
+    url="/gallery"
+    skeleton-path="./hypertext/base.html"
+    content-path="./hypertext/gallery.html"
+    title="Gallery"
+
+[[page]]
+    url="/museum"
+    skeleton-path="./hypertext/base.html"
+    content-path="./hypertext/museum.html"
+    title="Museum"
+
+[[page]]
+    url="/adventure-map"
+    skeleton-path="./hypertext/base.html"
+    content-path="./hypertext/adventure-map.html"
+    title="Adventure Map (cool sites I've found)"

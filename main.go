@@ -12,8 +12,8 @@ import (
 
 // The template that does raw response when not being requested by HTMX
 type ContentfulResponse struct {
-	Title string
-	Content string
+	Title 	string
+	Content	string
 }
 
 func ReturnContentfulPage(c *gin.Context, skeleton_path string, partial_path string, doc_title string) {
@@ -58,6 +58,7 @@ func main() {
 
 	router.Static("/assets", "./assets")
 	router.Static("/styles", "./styles")
+	router.Static("/scripts", "./scripts")
 	// I only do this in case I need to load extra content within a page at this
 	// subdirectory. Hope this doesn't break anything tho.
 	router.Static("/hypertext", "./hypertext")
@@ -127,7 +128,7 @@ func main() {
 		if(hx_header == "true") {
 			ReturnPartial(c, "./hypertext/lab-reports/simple-site-htmx-go.html")
 		} else {
-			ReturnContentfulPage(c, "./hypertext/base.html", "./hypertext/lab-reports/simple-site-htmx-go.html", "Quick and Diry HTMX+Go")
+			ReturnContentfulPage(c, "./hypertext/base.html", "./hypertext/lab-reports/simple-site-htmx-go.html", "Quick and Dirty HTMX+Go")
 		}
 	})
 	router.GET("/projects", func(c *gin.Context) {

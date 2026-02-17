@@ -1,0 +1,20 @@
+pre {
+    position: relative;
+    white-space: pre-wrap;
+}
+
+.copy-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    inset: 5px 5px auto auto;
+    width: 1em;
+    height: 1em;
+    border: 1px solid;
+    box-shadow: -3px 3px #999;
+}
+
+.toc {
+    position: sticky;
+    top: 120px;
+}
