@@ -1,3 +1,5 @@
+trusted_proxies = ["127.0.0.1", "93.188.161.205"]
+
 [[page]]
     url="/"
     skeleton-path="./hypertext/base.html"
@@ -11,7 +13,7 @@
     title="\"Lab Reports\""
 
 [[page]]
-    url="/lab-reports/simple-site-go-htmx"
+    url="/lab-reports/simple-site-htmx-go"
     skeleton-path="./hypertext/base.html"
     content-path="./hypertext/lab-reports/simple-site-htmx-go.html"
     title="Quick & Dirty HTMX+Go"
