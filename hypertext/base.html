@@ -11,24 +11,28 @@
         <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"
             integrity="sha384-/TgkGk7p307TH7EXJDuUlgG3Ce1UVolAOFopFekQkkXihi5u/6OCvVKyz1W+idaz"
             crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="https://unpkg.com/missing.css@1.2.0">
+        <!-- <link rel="stylesheet" href="https://unpkg.com/missing.css@1.2.0"> -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Acme&display=swap" rel="stylesheet">
-        <style>
-         :root {
-             font-family: "Acme", sans-serif;
-             font-weight: 400;
-             font-style: normal;
-             letter-spacing: 1px;
-             line-height: 105%;
-             font-size: 24px;
-             --flex-switch-threshold: 120ch;
-         }
-        </style>
+        <link href="https://fonts.googleapis.com/css2?family=Signika:wght@300..700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="/styles/base.css">
         <!-- Place favicon.ico in the root directory -->
     </head>
     <body>
+        <div class="background">
+            <ul class="circles">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+        </div>
         <!--[if lt IE 8]>
             <p class="browserupgrade">
             You are using an <strong>outdated</strong> browser. Please
@@ -36,24 +40,29 @@
             your experience.
             </p>
         <![endif]-->
-        <header class="navbar width:100%">
+        <header class="box">
             <nav aria-label="site-sections">
-                <ul role="list" class="flex-row flex-wrap:wrap">
-                    <li>
-                        <strong>
-                            <button
-                                hx-get="/"
-                                hx-target="#content"
-                                hx-swap="innerHTML"
-                                hx-trigger="click"
-                                hx-push-url="true">
-                                Home
-                            </button>
-                        </strong>
+                <ul>
+                    <li class="avatar-area">
+                        <img src="/assets/avatar.png" class="avatar-image" width="64" height="64" style="grid-area: avatar-image">
+                        <h1 class="avatar-text" style="grid-area: avatar-text">
+                            Ollie's Lab
+                        </h1>
                     </li>
                     <li>
-                        <strong>
                         <button
+                            class="nav-button"
+                            hx-get="/"
+                            hx-target="#content"
+                            hx-swap="innerHTML"
+                            hx-trigger="click"
+                            hx-push-url="true">
+                            Home
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                            class="nav-button"
                             hx-get="/lab-reports"
                             hx-target="#content"
                             hx-swap="innerHTML"
@@ -61,10 +70,10 @@
                             hx-push-url="true">
                             "Lab Reports"
                         </button>
-                        </strong>
                     </li>
-                        <strong>
+                    <li>
                         <button
+                            class="nav-button"
                             hx-get="/projects"
                             hx-target="#content"
                             hx-swap="innerHTML"
@@ -72,10 +81,10 @@
                             hx-push-url="true">
                             Projects
                         </button>
-                        </strong>
+                    </li>
                     <li>
-                        <strong>
                         <button
+                            class="nav-button"
                             hx-get="/tunes-town"
                             hx-target="#content"
                             hx-swap="innerHTML"
@@ -83,11 +92,10 @@
                             hx-push-url="true">
                             Tunes Town
                         </button>
-                        </strong>
                     </li>
                     <li>
-                        <strong>
                         <button
+                            class="nav-button"
                             hx-get="/gallery"
                             hx-target="#content"
                             hx-swap="innerHTML"
@@ -95,11 +103,10 @@
                             hx-push-url="true">
                             Gallery
                         </button>
-                        </strong>
                     </li>
                     <li>
-                        <strong>
                         <button
+                            class="nav-button"
                             hx-get="/museum"
                             hx-target="#content"
                             hx-swap="innerHTML"
@@ -107,11 +114,10 @@
                             hx-push-url="true">
                             Museum
                         </button>
-                        </strong>
                     </li>
                     <li>
-                        <strong>
                         <button
+                            class="nav-button"
                             hx-get="/adventure-map"
                             hx-target="#content"
                             hx-swap="innerHTML"
@@ -119,12 +125,12 @@
                             hx-push-url="true">
                             Adventure Map (cool sites I've found)
                         </button>
-                        </strong>
                     </li>
                 </ul>
             </nav>
+            <img src="/assets/88x31-inert/reclaim.gif" class="reclaim">
         </header>
-        <main id="content" class="width:100%">
+        <main id="content">
            {{.Content}} 
         </main>
         <footer>

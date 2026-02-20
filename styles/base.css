@@ -1,0 +1,336 @@
+@media (prefers-color-scheme: light) {
+    :root {
+        --theme: #f6f8f8;
+        --theme-secondary: #e6e8e8;
+        --nav-primary-color: #d5ecec;
+        --nav-secondary-color: #b0c8c8;
+        --light-corner: #f5fcfc;
+        --dark-corner: #202020;
+        --link: #943032;
+        --link-visited: #943032;
+        --link-hovered: #943032;
+        --accent-color: #005E61;
+        --primary: #211e1e;
+        --header: #1f1212;
+        --background-anim-color: #40161785;
+        --border: rgb(238, 238, 238);
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --theme: #323434;
+        --theme-secondary: #222424;
+        --nav-primary-color: #273c3d;
+        --nav-secondary-color: #353a3a;
+        --light-corner: #d5ecec;     
+        --dark-corner: #060606;      
+        --link: #FF8683;
+        --link-visited: #FF8683;
+        --link-hovered: #FF8683;
+        --accent-color: #8DD4D5;
+        --primary: #e9e3e3;
+        --background-anim-color: #ff9ca185;
+        --header: #ffe3e3;
+        --border: rgb(51, 51, 51);
+    }
+}
+
+:root {
+    --gap: 0.6em;
+    --content-gap: 20px;
+    --nav-width: 1080px;
+    --main-width: 1080px;
+    --nav1-height: 64px;
+    --header-height: 128px;
+    --footer-height: 60px;
+    --radius: 8px;
+    font-family: "Signika", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings: "GRAD" 0;
+    font-optical-sizing: auto;
+    letter-spacing: 1px;
+    line-height: 105%;
+    font-size: 24px;
+    background-color: var(--theme);
+    color: var(--primary);
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    flex-direction: column;
+    /* background-color: var(--theme-secondary); */
+    margin: 64px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    margin: auto;
+    color: var(--header);
+}
+
+/* styling links */
+a:link {
+    color: var(--link);
+}
+a:visited {
+    color: var(--link-visited);
+}
+a:hover {
+    color: var(--link-hovered)
+}
+
+button {
+    font-weight: bold;
+    padding: 0.6rem;
+    border-radius: var(--radius);
+    color: var(--primary);
+    background-image: linear-gradient(135deg, var(--nav-primary-color), var(--nav-secondary-color));
+    font-size: 16px;
+    margin: calc(var(--gap) * 2);
+    border: none;
+    cursor: pointer;
+}
+
+nav {
+    width: 100%;
+}
+
+nav > ul {
+    display: flex;
+    list-style-type: none;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-content: center;
+}
+
+nav > ul > li {
+    display: flex;
+    align-items: center;
+}
+
+
+.nav-button {
+    box-shadow:
+        inset 1px 1px 2px var(--light-corner),
+        1px 1px 2px var(--dark-corner);
+}
+
+.avatar-area {
+    flex-grow: 1;
+}
+
+.avatar-image {
+    border-radius: 10%;
+}
+
+.reclaim {
+    margin: var(--gap);
+}
+
+.avatar-text {
+    margin: calc(var(--gap) * 3);
+    color: var(--header);
+}
+
+main {
+    margin: 64px;
+}
+
+pre, code {
+    position: relative;
+    white-space: pre-wrap;
+}
+
+
+.no-bullets {
+    list-style-type: none;
+}
+
+.margin {
+    margin: var(--gap);
+}
+
+.centered {
+    display:flex;
+    align-content: center;
+    justify-content: center;
+    margin: auto;
+}
+
+.display-wrapped-rows {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+}
+
+.eighty-eight-thirty-one {
+    margin: 7px;
+    width: 88px;
+    height: 31px;
+}
+
+.box {
+    border-style: solid;
+    border-width: 1px;
+    border-radius: var(--radius);
+}
+
+.box > * {
+    margin: var(--gap);
+}
+
+.accent {
+    color: var(--accent-color);
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+.content-two-panel {
+    display: grid;
+    grid-template-columns: 3fr 7fr;
+    grid-auto-flow: row;
+}
+
+.content-two-panel > * {
+    margin: var(--gap);
+}
+
+@media (max-width: 1280px) {
+    .content-two-panel {
+        display: block;
+    }
+}
+
+.background {
+    z-index: -1;
+    position: sticky;
+    /* margin-top is a workaround for sticky taking up space */
+    margin-top: -100vh;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+}
+
+.circles{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.circles li{
+    position: absolute;
+    display: block;
+    list-style: none;
+    width: 20px;
+    height: 20px;
+    background: var(--background-anim-color);
+    animation: animate 25s linear infinite;
+    bottom: -150px;
+    
+}
+
+.circles li:nth-child(1){
+    left: 25%;
+    width: 80px;
+    height: 80px;
+    animation-delay: 0s;
+}
+
+
+.circles li:nth-child(2){
+    left: 10%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 2s;
+    animation-duration: 12s;
+}
+
+.circles li:nth-child(3){
+    left: 70%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 4s;
+}
+
+.circles li:nth-child(4){
+    left: 40%;
+    width: 60px;
+    height: 60px;
+    animation-delay: 0s;
+    animation-duration: 18s;
+}
+
+.circles li:nth-child(5){
+    left: 65%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 0s;
+}
+
+.circles li:nth-child(6){
+    left: 75%;
+    width: 110px;
+    height: 110px;
+    animation-delay: 3s;
+}
+
+.circles li:nth-child(7){
+    left: 35%;
+    width: 150px;
+    height: 150px;
+    animation-delay: 7s;
+}
+
+.circles li:nth-child(8){
+    left: 50%;
+    width: 25px;
+    height: 25px;
+    animation-delay: 15s;
+    animation-duration: 45s;
+}
+
+.circles li:nth-child(9){
+    left: 20%;
+    width: 15px;
+    height: 15px;
+    animation-delay: 2s;
+    animation-duration: 35s;
+}
+
+.circles li:nth-child(10){
+    left: 85%;
+    width: 150px;
+    height: 150px;
+    animation-delay: 0s;
+    animation-duration: 11s;
+}
+
+
+
+@keyframes animate {
+
+    0%{
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+        border-radius: 0;
+    }
+
+    100%{
+        transform: translateY(-1000px) rotate(720deg);
+        opacity: 0;
+        border-radius: 50%;
+    }
+
+}
