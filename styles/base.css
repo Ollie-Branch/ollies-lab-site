@@ -3,6 +3,7 @@
         --theme: #f6f8f8;
         --theme-secondary: #e6e8e8;
         --box-background:  #e6e8e885;
+        --code-background: #e6e8e8;
         --nav-primary-color: #d5ecec;
         --nav-secondary-color: #b0c8c8;
         --light-corner: #f5fcfc;
@@ -23,6 +24,7 @@
         --theme: #323434;
         --theme-secondary: #222424;
         --box-background: #22242485;
+        --code-background: #222424;
         --nav-primary-color: #273c3d;
         --nav-secondary-color: #353a3a;
         --light-corner: #d5ecec;     
@@ -39,7 +41,7 @@
 }
 
 :root {
-    --gap: 0.6em;
+    --gap: clamp(5px, 2vw, 0.6em);
     --content-gap: 20px;
     --nav-width: 1080px;
     --main-width: 1080px;
@@ -58,11 +60,10 @@
 
 header {
     display: flex;
+    gap: var(--gap);
     align-items: center;
     justify-items: center;
     flex-direction: column;
-    /* background-color: var(--theme-secondary); */
-    margin: 2%;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -71,6 +72,10 @@ h1, h2, h3, h4, h5, h6 {
     justify-content: center;
     margin: auto;
     color: var(--header);
+}
+
+img {
+    max-width: 100%;
 }
 
 /* styling links */
@@ -86,12 +91,11 @@ a:hover {
 
 button {
     font-weight: bold;
-    padding: 0.6rem;
+    padding: var(--gap);
     border-radius: var(--radius);
     color: var(--primary);
     background-image: linear-gradient(135deg, var(--nav-primary-color), var(--nav-secondary-color));
     font-size: 16px;
-    margin: calc(var(--gap) * 2);
     border: none;
     cursor: pointer;
     border-right: 1px var(--dark-corner);
@@ -107,6 +111,7 @@ nav {
 
 nav > ul {
     display: flex;
+    gap: var(--gap);
     list-style-type: none;
     flex-wrap: wrap;
     justify-content: flex-end;
@@ -118,7 +123,6 @@ nav > ul > li {
     align-items: center;
 }
 
-
 .avatar-area {
     flex-grow: 1;
 }
@@ -127,22 +131,28 @@ nav > ul > li {
     border-radius: 10%;
 }
 
-.reclaim {
-    margin: var(--gap);
-}
-
 .avatar-text {
     margin: calc(var(--gap) * 3);
     color: var(--header);
 }
 
-main {
-    margin: 2%;
+pre {
+    /* 
+    to respond properly I have to set display grid here
+    and then set overflow scroll in the below selector 
+    this also fixes the code copy button so it stays
+    in the corner while scrolling horiztontally.
+    
+    I hate this stupid hack either way
+    */
+    display: grid;
 }
 
 pre, code {
     position: relative;
-    white-space: pre-wrap;
+    background: var(--code-background);
+    border-radius: 8px;
+    overflow: scroll;
 }
 
 
@@ -163,12 +173,12 @@ pre, code {
 
 .display-wrapped-rows {
     display: flex;
+    gap: var(--gap);
     flex-wrap: wrap;
     align-content: center;
 }
 
 .eighty-eight-thirty-one {
-    margin: 7px;
     width: 88px;
     height: 31px;
 }
@@ -177,7 +187,8 @@ pre, code {
     background: var(--box-background);
     border-radius: var(--radius);
     backdrop-filter: blur(10px);
-    padding: 2%;
+    padding: var(--gap);
+    margin: var(--gap);
     border-style: solid;
     border-top: 2px var(--primary);
     border-left: 2px var(--primary);
@@ -202,9 +213,19 @@ pre, code {
 
 .content-two-panel {
     display: grid;
+    gap: var(--gap);
     grid-template-columns: 3fr 7fr;
     grid-auto-flow: row;
 }
+
+.content-two-panel > .toc {
+    height: 70vh;
+    position: sticky;
+    top: var(--gap);
+    left: 0;
+    height: fit-content;
+}
+
 
 .content-two-panel > * {
     margin: var(--gap);
@@ -214,6 +235,13 @@ pre, code {
     .content-two-panel {
         display: block;
     }
+    .content-two-panel > .toc {
+        height: fit-content;
+        position: relative;
+        top: auto;
+        left: auto;
+        display: block;
+    }
 }
 
 .background {
@@ -221,8 +249,10 @@ pre, code {
     position: sticky;
     /* margin-top is a workaround for sticky taking up space */
     margin-top: -100vh;
-    width: 100vw;
+    width: 96%;
     height: 100vh;
+    margin-left: auto;
+    margin-right: auto;
     top: 0;
     left: 0;
 }

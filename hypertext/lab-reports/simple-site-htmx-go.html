@@ -264,7 +264,7 @@
             this (if your system defaults to light theme the page will be
             a light color):
             <br>
-            <img src="/assets/lab-reports/simple-site-htmx-go/htmx-skeleton.png" alt="A site with a navbar displaying &quot;content-1&quot;,
+            <img src="/assets/lab-reports/simple-site-htmx-go/htmx-skeleton.png" class="centered" alt="A site with a navbar displaying &quot;content-1&quot;,
                          &quot;content-2&quot;, and &quot;content-3&quot;.">
         </p>
         <p>
@@ -366,6 +366,7 @@
             Here are some shots attached below to show what it should look
             like (after clicking the respective buttons in the navbar):
             <br>
+            <div class="display-wrapped-rows">
             <img src="/assets/lab-reports/simple-site-htmx-go/htmx-display-content-1.png" alt="The website layout from the previous image, but now
                          containing the contents of the content-1.html file in
                          the body">
@@ -375,6 +376,7 @@
             <img src="/assets/lab-reports/simple-site-htmx-go/htmx-display-content-3.png" alt="The website layout from the previous image, but now
                          containing the contents of the content-3.html file in
                          the body">
+            </div>
         </p>
         <h2 id="a-problem-approaches" class="flex-row justify-content:center align-items:center">
             What If We Navigate To A URL Directly Instead of Using The
@@ -563,7 +565,9 @@ router.GET("/", func(c *gin.Context) {
             it ourselves.
             <br>
             <img src="/assets/lab-reports/simple-site-htmx-go/ill-do-it-myself.gif"
-                alt="Thanos saying &quot;fine, I'll do it myself&quot;">
+                 class="centered"
+                 style="margin-top: 12px; margin-bottom: 12px;"
+                 alt="Thanos saying &quot;fine, I'll do it myself&quot;">
             <br>
             Normally this would be a daunting task, and to be honest it took
             me a minute to figure out (learning Go as I went wasn't my best

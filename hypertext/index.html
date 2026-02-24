@@ -2,18 +2,18 @@
     <script>
      document.title = "Ollie's Lab"
     </script>
-    <aside class="box" hidden>
-        <div class="box">
-        <h1>
-            News:
-        </h1>
-        <p>
-            26/2/12 <br>
-            New website layout in progress!!! Moving away from Hugo and
-            onto plain HTML and CSS to make re-styling easier hopefully.
-        </p>
-        </div>
-    </aside>
+    <!-- <aside class="box" hidden>
+            <div class="box">
+            <h1>
+                News:
+            </h1>
+            <p>
+                26/2/12 <br>
+                New website layout in progress!!! Moving away from Hugo and
+                onto plain HTML and CSS to make re-styling easier hopefully.
+            </p>
+            </div>
+        </aside> -->
     <aside class="box">
         <div class="box">
         <h1>
@@ -47,28 +47,12 @@
         <ul class="no-bullets">
             <li class="box margin">
                 <p>
-                    Fix bug where the copy buttons aren't available on a blog
-                    post when directly navigating to its link. They are
-                    available by navigating to it from the homepage but
-                    something gets busted in the process of server side
-                    rendering.
-                </p>
-            </li>
-            <li class="box margin">
-                <p>
                     I have made the server more scalable using a TOML file to
                     define all the endpoints, but I still need to make it
                     re-scan when the file changes to update the urls. This would
                     require also decoupling the containerized backend from the
                     frontend, using a volume to contain the frontend's data
                     instead of just copying it into an immutable container.
-                </p>
-            </li>
-            <li class="box margin">
-                <p>
-                    Move away from missing.css and onto my own stylesheets, this is
-                    a placeholder solution to buy me time to work on the backend and
-                    content a little bit.
                 </p>
             </li>
             <li class="box margin">
